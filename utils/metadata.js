@@ -1,6 +1,6 @@
 const STEP_TYPE = {
-  STARTED: 'STARTED',
-  FINISHED: 'FINISHED',
+  STARTED: 'TRACE_STARTED',
+  FINISHED: 'TRACE_FINISHED',
 }
 
 class Metadata {
@@ -45,6 +45,7 @@ class Metadata {
 class TracedDuration {
   constructor(steps) {
     this.steps = steps || [{ name: STEP_TYPE.STARTED, time: Date.now() }];
+    this.initStep = { name: 'INIT_PROCESSING', time: Date.now() };
   }
   get() { return this.steps; }
   addStep(name) {
@@ -53,6 +54,7 @@ class TracedDuration {
     return steps;
   }
   publish() {
+    this.steps.push(this.initStep);
     this.steps.push({ name: STEP_TYPE.FINISHED, time: Date.now() });
     const logObject = {}
     this.steps.forEach((step, index, arr) => {
