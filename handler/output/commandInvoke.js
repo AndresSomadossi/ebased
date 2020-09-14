@@ -1,5 +1,5 @@
-const { FaultHandled, Handled } = require('../utils/error');
-const outputMetric = require('../metrics/output');
+const { FaultHandled } = require('../../util/error');
+const outputMetric = require('../../metric/output');
 const mode = 'OUTPUT_COMMAND_INVOKE';
 
 module.exports = {
@@ -8,8 +8,7 @@ module.exports = {
     return body;
   },
   responseError: (error) => {
-    if (!(error instanceof Handled))
-      error = new FaultHandled(`${error.name}-${error.message}`, { code: 'UHANDLED_OUTPUT_FAULT', layer: mode, });
+    error = FaultHandled.captureUnhanlded(error, { code: 'UHANDLED_OUTPUT_FAULT', layer: mode });
     outputMetric.responseErrorReturned(error, mode);
     throw JSON.stringify(error.get());
   },

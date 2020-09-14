@@ -1,7 +1,7 @@
 const uuid = require('uuid');
 const Schema = require('schemy');
-const { FaultHandled } = require('./error');
-const { customEvent } = require('../metrics/customEvent');
+const { FaultHandled } = require('../util/error');
+const { customEvent } = require('../metric/customEvent');
 
 class DownstreamEvent {
   constructor({ type, specversion, payload, meta, schema }) {

@@ -1,4 +1,4 @@
-const logger = require('../utils/logger');
+const logger = require('../util/logger');
 
 const METRIC_TYPES = {
   INPUT_RECEIVED: 'SYS.METRIC.INPUT.INPUT_RECEIVED',

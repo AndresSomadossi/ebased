@@ -1,7 +1,7 @@
 const uuid = require('uuid');
 const Schema = require('schemy');
-const { ErrorHandled } = require('./error');
-const { customEvent } = require('../metrics/customEvent');
+const { ErrorHandled } = require('../util/error');
+const { customEvent } = require('../metric/customEvent');
 
 class InputValidation {
   constructor({ source, type, specversion, payload, schema }) {
@@ -18,8 +18,8 @@ class InputValidation {
   validate() {
     if (!this.schema.validate(this.payload)) {
       const message = this.schema.getValidationErrors();
-      const error = new ErrorHandled(message, { code: 'CLIENT_VALIDATION_ERROR', layer: this.type });
-      this.type = `${this.type}_ERROR`;
+      const error = new ErrorHandled(message, { code: 'CLIENT_VALIDATION_FAILED', layer: this.type });
+      this.type = `${this.type}_FAILED`;
       this.payload = { error: error.get(), originalPayload: this.payload };
       this.publish();
       throw error;
@@ -31,3 +31,4 @@ class InputValidation {
 }
 
 module.exports = { InputValidation };
+

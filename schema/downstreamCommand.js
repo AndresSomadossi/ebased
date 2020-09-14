@@ -1,6 +1,6 @@
 const uuid = require('uuid');
 const Schema = require('schemy');
-const { FaultHandled, ErrorHandled } = require('./error');
+const { FaultHandled, ErrorHandled } = require('../util/error');
 
 class DownstreamCommand {
   constructor({ type, payload, meta, requestSchema, responseSchema, errorCatalog }) {

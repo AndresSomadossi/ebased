@@ -1,4 +1,4 @@
-const logger = require('../utils/logger');
+const logger = require('../util/logger');
 
 const METRIC_TYPES = {
   FAULT_HANDLED: 'SYS.METRIC.ERROR.FAULT_HANDLED',

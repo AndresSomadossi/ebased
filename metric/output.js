@@ -1,4 +1,4 @@
-const logger = require('../utils/logger');
+const logger = require('../util/logger');
 
 const METRIC_TYPES = {
   OUTPUT_ERROR_RETURNED: 'SYS.METRIC.OUTPUT.OUTPUT_ERROR_RETURNED',

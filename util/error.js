@@ -1,4 +1,4 @@
-const errorMetrics = require('../metrics/error');
+const errorMetrics = require('../metric/error');
 
 class Handled extends Error {
   constructor(message, { status, code, layer }) {
@@ -21,6 +21,10 @@ class FaultHandled extends Handled {
   publish() {
     errorMetrics.faultHandled({ ...this, stack: this.stack.split('\n') });
   }
+  static captureUnhanlded(error, { code, layer }) {
+    if (error instanceof Handled) return error;
+    return new FaultHandled(`${error.name}-${error.message}`, { code, layer });
+  }
 }
 
 class ErrorHandled extends Handled {
@@ -35,4 +39,4 @@ class ErrorHandled extends Handled {
   }
 }
 
-module.exports = { Handled, FaultHandled, ErrorHandled };
+module.exports = { FaultHandled, ErrorHandled };

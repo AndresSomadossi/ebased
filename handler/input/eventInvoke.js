@@ -1,5 +1,5 @@
-const { Metadata } = require('../utils/metadata');
-const inputMetric = require('../metrics/input');
+const { Metadata } = require('../../util/metadata');
+const inputMetric = require('../../metric/input');
 const mode = 'INPUT_EVENT_INVOKE';
 
 
