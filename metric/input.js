@@ -10,7 +10,7 @@ module.exports.input = (inputPayload, context, inputMode, inputMeta) => {
     type: METRIC_TYPES.INPUT_RECEIVED,
     functionName: process.env.AWS_LAMBDA_FUNCTION_NAME,
     functionVersion: process.env.AWS_LAMBDA_FUNCTION_VERSION,
-    timeout: context.getRemainingTimeInMillis(),
+    timeout: (context.getRemainingTimeInMillis) && context.getRemainingTimeInMillis(),
     logLevel: process.env.LOG_LEVEL || 'INFO',
     inputMode: inputMode,
     inputMeta: inputMeta,

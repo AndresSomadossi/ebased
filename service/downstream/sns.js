@@ -14,12 +14,19 @@ module.exports = {
   publish: async (publishParams, eventMeta) => {
     try {
       const timeout = sns.config.httpOptions.timeout;
+      publishParams.TopicArn = arnCheck(publishParams.TopicArn);
       publishParams.Message = JSON.stringify(publishParams.Message);
-      const { TopicArn, Message, MessageAttributes = {} } = publishParams;
       if (eventMeta) {
-        Object.keys(eventMeta).forEach(eventMetaKey =>
-          MessageAttributes[eventMetaKey] = { StringValue: eventMeta[eventMetaKey].toString(), DataType: 'String' })
+        publishParams.MessageAttributes = {};
+        Object.keys(eventMeta).forEach(eventMetaKey => {
+          const el = eventMeta[eventMetaKey];
+          publishParams.MessageAttributes[eventMetaKey] = {
+            StringValue: (typeof el === 'string') ? el : JSON.stringify(el),
+            DataType: 'String'
+          };
+        })
       }
+      const { TopicArn, Message, MessageAttributes = {} } = publishParams;
       const metric = new DownstreamEventMetric(layer, timeout, TopicArn, { Message, MessageAttributes });
       await sns.publish(publishParams).promise().catch(error => {
         metric.finish().setCode(CODES.SNS_PUBLISH_DELIVERY_FAULT).publish();
@@ -27,7 +34,12 @@ module.exports = {
       });
       metric.finish().setCode(CODES.SNS_PUBLISH_DELIVERY_OK).publish();
     } catch (error) {
-      throw FaultHandled.captureUnhanlded(error, { code: CODES.LAMBDA_INVOKE_INVOCATION_FAULT, layer });
+      throw FaultHandled.captureUnhanlded(error, { code: CODES.SNS_PUBLISH_DELIVERY_FAULT, layer });
     }
   },
+}
+
+const arnCheck = (TopicArn) => {
+  if (TopicArn.includes('arn')) return TopicArn;
+  return `arn:aws:sns:${process.env.DEFAULT_ARN}:${TopicArn}`;
 }
