@@ -6,7 +6,7 @@ const STEP_TYPE = {
 class Metadata {
   constructor(context = {}, meta = {}) {
     this.tracedDuration = new TracedDuration(meta.tracedDuration);
-    this.traceId = process.env._X_AMZN_TRACE_ID;
+    this.traceId = meta.traceId || process.env._X_AMZN_TRACE_ID;
     this.clientId = meta.clientId;
     this.trackingTag = meta.trackingTag;
     this.id = meta.id;
@@ -19,8 +19,9 @@ class Metadata {
   }
   setEnvVars() {
     const arn = (this.context.invokedFunctionArn) ? this.context.invokedFunctionArn.split(':') : [];
-    process.env.DEFAULT_ARN = `${arn[3]}:${arn[4]}`;
-    this.traceId && (process.env.traceId = this.traceId);
+    process.env.REGION = arn[3];
+    process.env.ACCOUNT_ID = arn[4];
+    this.traceId && (process.env.traceId = this.traceId) && (process.env._X_AMZN_TRACE_ID = this.traceId);
     this.clientId && (process.env.clientId = this.clientId);
     this.trackingTag && (process.env.trackingTag = this.trackingTag);
   }

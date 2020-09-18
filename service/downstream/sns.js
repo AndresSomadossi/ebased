@@ -41,5 +41,5 @@ module.exports = {
 
 const arnCheck = (TopicArn) => {
   if (TopicArn.includes('arn')) return TopicArn;
-  return `arn:aws:sns:${process.env.DEFAULT_ARN}:${TopicArn}`;
+  return `arn:aws:sns:${process.env.REGION}:${process.env.ACCOUNT_ID}:${TopicArn}`;
 }
