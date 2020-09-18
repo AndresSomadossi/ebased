@@ -1,6 +1,6 @@
 const { FaultHandled } = require('../../util/error');
 const outputMetric = require('../../metric/output');
-const mode = 'API_GATEWAY_INVOKE';
+const mode = 'OUTPUT_COMMAND_API';
 
 module.exports = {
   response: ({ body, status = 200 }, meta) => {
@@ -13,6 +13,10 @@ module.exports = {
   responseError: (error) => {
     error = FaultHandled.captureUnhanlded(error, { code: 'UHANDLED_OUTPUT_FAULT', layer: mode });
     outputMetric.responseErrorReturned(error, mode);
-    throw JSON.stringify(error.get());
+    const { status, code, detail } = error.get()
+    return {
+      body: { code, detail },
+      statusCode: status
+    };
   },
 }
