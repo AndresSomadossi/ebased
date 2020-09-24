@@ -3,7 +3,7 @@ const outputMetric = require('../../metric/output');
 const mode = 'OUTPUT_EVENT_CONFIRMATION';
 
 module.exports = {
-  processingFinished: ({ body, status = 202 }, meta) => {
+  processingFinished: ({ body = {}, status = 202 } = {}, meta) => {
     outputMetric.responseReturned({ body, status }, mode, meta);
     return;
   },

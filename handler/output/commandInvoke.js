@@ -3,7 +3,7 @@ const outputMetric = require('../../metric/output');
 const mode = 'OUTPUT_COMMAND_INVOKE';
 
 module.exports = {
-  response: ({ body, status = 200 }, meta) => {
+  response: ({ body = {}, status = 200 } = {}, meta) => {
     outputMetric.responseReturned({ body, status }, mode, meta);
     return body;
   },
