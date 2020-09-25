@@ -40,6 +40,7 @@ module.exports = {
 }
 
 const arnCheck = (QueueUrl) => {
+  if (!QueueUrl) throw new Error('missing QueueUrl');
   if (QueueUrl.startsWith('https')) return QueueUrl;
   return `https://sqs.${process.env.REGION}.amazonaws.com/${process.env.ACCOUNT_ID}/${QueueUrl}`;
 }

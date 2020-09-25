@@ -2,7 +2,7 @@ const logger = require('../util/logger');
 
 const METRIC_TYPES = {
   INPUT_RECEIVED: 'SYS.METRIC.INPUT.INPUT_RECEIVED',
-  DETAILED_INPUT_RECEIVED: 'SYS.METRIC.INPUT.DETAILED_INPUT_RECEIVED',
+  DETAILED_INPUT_RECEIVED: 'SYS.LOG.INPUT.DETAILED_INPUT_RECEIVED',
 };
 
 module.exports.input = (inputPayload, context, inputMode, inputMeta) => {

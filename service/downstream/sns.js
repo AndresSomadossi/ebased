@@ -40,6 +40,7 @@ module.exports = {
 }
 
 const arnCheck = (TopicArn) => {
+  if (!TopicArn) throw new Error('missing TopicArn');
   if (TopicArn.includes('arn')) return TopicArn;
   return `arn:aws:sns:${process.env.REGION}:${process.env.ACCOUNT_ID}:${TopicArn}`;
 }

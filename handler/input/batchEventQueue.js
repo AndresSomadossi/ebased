@@ -31,6 +31,6 @@ function eventReceived(event = {}, context = {}) {
     inputMetric.input(event, context, mode, eventMeta.get());
     return { eventPayload: eventPayload, eventMeta };
   } catch (error) {
-    throw new FaultHandled(error.message, { code: 'BAD_PROTOCOL_FAULT', layer: mode })
+    throw new FaultHandled(error.message, { code: 'BAD_INPUT_PROTOCOL_FAULT', layer: mode })
   }
 }

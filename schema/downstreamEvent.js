@@ -3,6 +3,10 @@ const Schema = require('schemy');
 const { FaultHandled } = require('../util/error');
 const { customEvent } = require('../metric/customEvent');
 
+const ERROR_CODES = {
+  CREATION_FAULT: 'DOWNSTREAM_EVENT_CREATION_FAULT',
+}
+
 class DownstreamEvent {
   constructor({ type, specversion, payload, meta, schema }) {
     this.id = uuid.v4();
@@ -10,8 +14,8 @@ class DownstreamEvent {
     this.time = Date.now();
     this.type = type;
     this.specversion = specversion;
-    this.payload = {...payload};
-    this.meta = meta,
+    this.payload = { ...payload };
+    this.meta = meta;
     this.schema = new Schema(schema);
     this.validate();
     this.publish();
@@ -19,7 +23,7 @@ class DownstreamEvent {
   validate() {
     if (!this.schema.validate(this.payload)) {
       const message = this.schema.getValidationErrors();
-      throw new FaultHandled(message, { code: 'DOWNSTREAM_EVENT_CREATION_FAULT', layer: this.type, });
+      throw new FaultHandled(message, { code: ERROR_CODES.CREATION_FAULT, layer: this.type, });
     }
   }
   publish() {
