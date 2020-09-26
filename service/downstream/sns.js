@@ -1,7 +1,7 @@
 const SNS = require('aws-sdk/clients/sns');
-const { DownstreamEventMetric } = require('../../metric/downstreamEvent');
+const { DownstreamEventMetric } = require('../../_metric/downstreamEvent');
 const { FaultHandled } = require('../../util/error');
-const { captureAWSClient } = require('../../util/tracer');
+const { captureAWSClient } = require('../../_helper/tracer');
 const sns = captureAWSClient(new SNS());
 
 const layer = 'DOWNSTREAM_SNS';

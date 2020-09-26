@@ -1,4 +1,4 @@
-const logger = require('../util/logger');
+const logger = require('../_helper/logger');
 
 const METRIC_TYPES = {
   COMMAND_FINISHED: 'SYS.METRIC.DOWNSTREAM.COMMAND_FINISHED',

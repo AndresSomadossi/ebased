@@ -1,7 +1,7 @@
 const SQS = require('aws-sdk/clients/sqs');
-const { DownstreamEventMetric } = require('../../metric/downstreamEvent');
+const { DownstreamEventMetric } = require('../../_metric/downstreamEvent');
 const { FaultHandled } = require('../../util/error');
-const { captureAWSClient } = require('../../util/tracer');
+const { captureAWSClient } = require('../../_helper/tracer');
 const sqs = captureAWSClient(new SQS());
 
 const layer = 'DOWNSTREAM_SQS';

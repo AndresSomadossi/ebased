@@ -1,7 +1,7 @@
 const uuid = require('uuid');
 const Schema = require('schemy');
 const { FaultHandled } = require('../util/error');
-const { customEvent } = require('../metric/customEvent');
+const { customEvent } = require('../_metric/customEvent');
 
 const ERROR_CODES = {
   CREATION_FAULT: 'METRIC_EVENT_CREATION_FAULT',

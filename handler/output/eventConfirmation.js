@@ -1,5 +1,5 @@
+const outputMetric = require('../../_metric/output');
 const { FaultHandled } = require('../../util/error');
-const outputMetric = require('../../metric/output');
 const mode = 'OUTPUT_EVENT_CONFIRMATION';
 
 module.exports = {

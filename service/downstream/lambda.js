@@ -1,8 +1,8 @@
 const Lambda = require('aws-sdk/clients/lambda');
-const { DownstreamCommandMetric } = require('../../metric/downstreamCommand');
-const { DownstreamEventMetric } = require('../../metric/downstreamEvent');
+const { DownstreamCommandMetric } = require('../../_metric/downstreamCommand');
+const { DownstreamEventMetric } = require('../../_metric/downstreamEvent');
 const { FaultHandled, ErrorHandled } = require('../../util/error');
-const { captureAWSClient } = require('../../util/tracer');
+const { captureAWSClient } = require('../../_helper/tracer');
 const lambda = captureAWSClient(new Lambda());
 
 const CODES = {

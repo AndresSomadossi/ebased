@@ -1,4 +1,4 @@
-const errorMetrics = require('../metric/error');
+const errorMetrics = require('../_metric/error');
 
 class Handled extends Error {
   constructor(message, { status, code, layer }) {

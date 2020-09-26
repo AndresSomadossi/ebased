@@ -1,5 +1,5 @@
-const tracer = require('../../util/tracer');
-const { DownstreamCommandMetric } = require('../../metric/downstreamCommand');
+const tracer = require('../../_helper/tracer');
+const { DownstreamCommandMetric } = require('../../_metric/downstreamCommand');
 const { ErrorHandled, FaultHandled } = require('../../util/error');
 tracer.captureHTTP();
 const axios = require('axios').default;

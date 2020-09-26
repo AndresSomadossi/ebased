@@ -1,4 +1,4 @@
-const logger = require('../util/logger');
+const logger = require('../_helper/logger');
 
 module.exports = {
   customEvent(event) {

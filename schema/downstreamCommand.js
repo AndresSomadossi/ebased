@@ -8,11 +8,17 @@ const ERROR_CODES = {
   UNMATCHED_CATALOG_FAULT: 'DOWNSTREAM_COMMAND_UNMATCHED_CATALOG_FAULT',
 }
 
+const getSource = () => {
+  const name = process.env.AWS_LAMBDA_FUNCTION_NAME;
+  if (!name) return 'missing:AWS_LAMBDA_FUNCTION_NAME'
+  return (name.includes('-')) ? name.split('-').pop() : name;
+}
+
 class DownstreamCommand {
   constructor({ type, payload, meta, requestSchema, responseSchema, errorCatalog }) {
     this.id = uuid.v4();
     this.type = type;
-    this.source = `${process.env.AWS_LAMBDA_FUNCTION_NAME.split('-').pop()}`;
+    this.source = getSource();
     this.payload = { ...payload };
     this.meta = meta;
     this.requestSchema = new Schema(requestSchema);

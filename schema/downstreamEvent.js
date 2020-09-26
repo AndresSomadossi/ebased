@@ -1,16 +1,22 @@
 const uuid = require('uuid');
 const Schema = require('schemy');
 const { FaultHandled } = require('../util/error');
-const { customEvent } = require('../metric/customEvent');
+const { customEvent } = require('../_metric/customEvent');
 
 const ERROR_CODES = {
   CREATION_FAULT: 'DOWNSTREAM_EVENT_CREATION_FAULT',
 }
 
+const getSource = () => {
+  const name = process.env.AWS_LAMBDA_FUNCTION_NAME;
+  if (!name) return 'missing:AWS_LAMBDA_FUNCTION_NAME'
+  return (name.includes('-')) ? name.split('-').pop() : name;
+}
+
 class DownstreamEvent {
   constructor({ type, specversion, payload, meta, schema }) {
     this.id = uuid.v4();
-    this.source = `${process.env.AWS_LAMBDA_FUNCTION_NAME.split('-').pop()}`;
+    this.source = getSource();
     this.time = Date.now();
     this.type = type;
     this.specversion = specversion;

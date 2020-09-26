@@ -1,5 +1,6 @@
-const { Metadata } = require('../../util/metadata');
-const inputMetric = require('../../metric/input');
+const inputMetric = require('../../_metric/input');
+const { Metadata } = require('../../_helper/metadata');
+const { FaultHandled } = require('../../util/error');
 const mode = 'INPUT_COMMAND_API';
 
 module.exports = {

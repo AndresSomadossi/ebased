@@ -1,7 +1,7 @@
 const uuid = require('uuid');
 const Schema = require('schemy');
 const { ErrorHandled } = require('../util/error');
-const { customEvent } = require('../metric/customEvent');
+const { customEvent } = require('../_metric/customEvent');
 
 const ERROR_CODES = {
   CLIENT_VALIDATION_FAILED: 'CLIENT_VALIDATION_FAILED',

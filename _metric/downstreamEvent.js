@@ -1,4 +1,4 @@
-const logger = require('../util/logger');
+const logger = require('../_helper/logger');
 
 const METRIC_TYPES = {
   EVENT_DELIVERED: 'SYS.METRIC.DOWNSTREAM.EVENT_DELIVERED',
