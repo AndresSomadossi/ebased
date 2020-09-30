@@ -30,13 +30,13 @@ class DownstreamCommand {
     if (!this.requestSchema.validate(this.payload)) {
       const message = this.requestSchema.getValidationErrors();
       throw new FaultHandled(message, { code: ERROR_CODES.REQUEST_FAULT, layer: this.type, });
-    } else this.payload = this.schema.getBody();
+    } else this.payload = this.requestSchema.getBody();
   }
   validateResponse(response) {
     if (!this.responseSchema.validate(response)) {
       const message = this.responseSchema.getValidationErrors();
       throw new FaultHandled(message, { code: ERROR_CODES.RESPONSE_FAULT, layer: this.type, });
-    }
+    } else this.payload = this.responseSchema.getBody();
   }
   getErrorCataloged(code, message) {
     const catalogedError = this.errorCatalog[code];
