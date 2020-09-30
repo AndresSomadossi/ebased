@@ -30,7 +30,7 @@ class DownstreamCommand {
     if (!this.requestSchema.validate(this.payload)) {
       const message = this.requestSchema.getValidationErrors();
       throw new FaultHandled(message, { code: ERROR_CODES.REQUEST_FAULT, layer: this.type, });
-    }
+    } else this.payload = this.schema.getBody();
   }
   validateResponse(response) {
     if (!this.responseSchema.validate(response)) {

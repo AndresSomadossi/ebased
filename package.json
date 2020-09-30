@@ -1,6 +1,6 @@
 {
   "name": "ebased",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Utilities to write Event Driven architectures on AWS",
   "main": "index.js",
   "scripts": {
@@ -20,7 +20,7 @@
     "aws-sdk": "^2.747.0",
     "aws-xray-sdk-core": "^3.1.0",
     "axios": "^0.20.0",
-    "schemy": "^1.5.3",
+    "schemy": "^1.6.3",
     "uuid": "^8.3.0"
   }
 }

@@ -24,7 +24,7 @@ module.exports = {
             StringValue: (typeof el === 'string') ? el : JSON.stringify(el),
             DataType: 'String'
           };
-        })
+        });
       }
       const { QueueUrl, MessageBody, MessageAttributes = {} } = sendParams;
       const metric = new DownstreamEventMetric(layer, timeout, QueueUrl, { MessageBody, MessageAttributes });

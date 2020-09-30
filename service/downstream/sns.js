@@ -24,7 +24,7 @@ module.exports = {
             StringValue: (typeof el === 'string') ? el : JSON.stringify(el),
             DataType: 'String'
           };
-        })
+        });
       }
       const { TopicArn, Message, MessageAttributes = {} } = publishParams;
       const metric = new DownstreamEventMetric(layer, timeout, TopicArn, { Message, MessageAttributes });

@@ -27,7 +27,7 @@ class InputValidation {
       this.payload = { error: error.get(), originalPayload: this.payload };
       this.publish();
       throw error;
-    }
+    } else this.payload = this.schema.getBody();
   }
   publish() {
     if (this.source === 'CLIENT_COMMAND') customEvent(this);
