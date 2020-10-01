@@ -6,17 +6,14 @@ module.exports = {
   response: ({ body = {}, status = 200 } = {}, meta) => {
     outputMetric.responseReturned({ body, status }, mode, meta);
     return {
-      body: (typeof body !== 'string') ? JSON.stringify(body) : body,
-      statusCode: status
+      statusCode: status,
+      body: (typeof body === 'string') ? body : JSON.stringify(body),
     };
   },
   responseError: (error) => {
     error = FaultHandled.captureUnhanlded(error, { code: 'UHANDLED_OUTPUT_FAULT', layer: mode });
     outputMetric.responseErrorReturned(error, mode);
     const { status, code, detail } = error.get()
-    return {
-      body: { code, detail },
-      statusCode: status
-    };
+    return { statusCode: status, body: { code, detail } };
   },
 }

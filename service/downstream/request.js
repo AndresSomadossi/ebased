@@ -12,9 +12,10 @@ const CODES = {
   REQUEST_INVOCATION_FAULT: 'REQUEST_INVOCATION_FAULT',
 };
 
-module.exports = async (params) => {
+module.exports = async (params, commandMeta) => {
   try {
     verifyParams(params);
+    injectMeta(params, commandMeta);
     const metric = new DownstreamCommandMetric(layer);
     const result = await axios.request(params).catch(error => {
       const errorName = `${error.name}-${error.message}`;
@@ -47,4 +48,13 @@ module.exports = async (params) => {
 function verifyParams(params) {
   if (params.timeout) params.timeout = parseInt(params.timeout);
   if (isNaN(params.timeout)) throw new Error('Invalid timeout value');
+}
+
+function injectMeta(params, commandMeta) {
+  if (commandMeta) {
+    params.headers = { ...params.headers, ...commandMeta };
+    Object.keys(params.headers).forEach(p =>
+      params.headers[p] = (typeof params.headers[p] === 'string') ?
+      params.headers[p] : JSON.stringify(params.headers[p]))
+  }
 }

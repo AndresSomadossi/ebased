@@ -18,7 +18,7 @@ module.exports = {
   invoke: async (invokeParams, commandMeta) => {
     try {
       invokeParams.InvocationType = 'RequestResponse';
-      if (commandMeta) invokeParams.Payload.meta = commandMeta;
+      injectMeta(invokeParams, commandMeta);
       if (invokeParams.Payload) invokeParams.Payload = JSON.stringify(invokeParams.Payload);
       const timeout = lambda.config.httpOptions.timeout;
       const metric = new DownstreamCommandMetric(`${layer}_INVOKE`);
@@ -40,7 +40,7 @@ module.exports = {
   invokeAsync: async (invokeParams, eventMeta) => {
     try {
       invokeParams.InvocationType = 'Event';
-      if (eventMeta) invokeParams.Payload.meta = eventMeta;
+      injectMeta(invokeParams, eventMeta);
       if (invokeParams.Payload) invokeParams.Payload = JSON.stringify(invokeParams.Payload);
       const timeout = lambda.config.httpOptions.timeout;
       const metric = new DownstreamEventMetric(`${layer}_ASYNC_INVOKE`, timeout, invokeParams.FunctionName, invokeParams.Payload);
@@ -81,4 +81,8 @@ function toJSON(str) {
   } catch (error) {
     throw new FaultHandled('Malformed JSON in payload', { code: CODES.LAMBDA_INVOKE_SERVER_FAULT, layer });
   }
+}
+
+function injectMeta(invokeParams, meta) {
+  if (meta) invokeParams.Payload.meta = meta;
 }

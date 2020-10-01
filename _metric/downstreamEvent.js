@@ -6,12 +6,12 @@ const METRIC_TYPES = {
 }
 
 class DownstreamEventMetric {
-  constructor(service, timeout, destination, requestPayload) {
+  constructor(service, timeout, destination, eventData) {
     this.initTime = Date.now();
     this.service = service;
     this.timeout = timeout;
     this.destination = destination;
-    this.requestPayload = (typeof requestPayload === 'object') ? JSON.stringify(requestPayload) : requestPayload;
+    this.eventData = (typeof eventData === 'object') ? JSON.stringify(eventData) : eventData;
   }
   finish(duration) {
     this.duration = (duration == null) ? Date.now() - this.initTime : duration;
@@ -32,7 +32,7 @@ class DownstreamEventMetric {
     });
     logger.debug({
       type: METRIC_TYPES.DETAILED_EVENT_DELIVERED,
-      requestPayload: this.requestPayload,
+      eventData: this.eventData,
     });
   }
 }
