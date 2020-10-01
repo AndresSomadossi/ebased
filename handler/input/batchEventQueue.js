@@ -6,8 +6,8 @@ const mode = 'INPUT_BATCH_EVENT_QUEUE';
 module.exports = {
   batchIterator: async (events = {}, context, domain, processingFinished) => {
     await Promise.all(events.Records.map(async event => {
-      const { eventPayload, eventMeta } = eventReceived(event, context);
-      const domainReturn = await domain( eventPayload, eventMeta);  
+      const { eventPayload, eventMeta, rawEvent } = eventReceived(event, context);
+      const domainReturn = await domain(eventPayload, eventMeta, rawEvent);
       return processingFinished(domainReturn, eventMeta);
     }));
     return { body: { eventsProcessed: events.Records.length } }
@@ -16,6 +16,7 @@ module.exports = {
 
 function eventReceived(event = {}, context = {}) {
   try {
+    const rawEvent = event;
     const { id, source, time, specversion, tracedDuration, clientId, trackingTag } = event.messageAttributes;
     const eventPayload = JSON.parse(event.body);
     const eventMeta = new Metadata(context, {
@@ -29,7 +30,7 @@ function eventReceived(event = {}, context = {}) {
       trackingTag: trackingTag && trackingTag.stringValue,
     });
     inputMetric.input(event, context, mode, eventMeta.get());
-    return { eventPayload: eventPayload, eventMeta };
+    return { eventPayload: eventPayload, eventMeta, rawEvent };
   } catch (error) {
     throw new FaultHandled(error.message, { code: 'BAD_INPUT_PROTOCOL_FAULT', layer: mode })
   }
