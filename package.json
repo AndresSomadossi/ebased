@@ -1,6 +1,6 @@
 {
   "name": "ebased",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "Utilities to write Event Driven architectures on AWS",
   "main": "index.js",
   "scripts": {
