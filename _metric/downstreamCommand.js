@@ -35,12 +35,12 @@ class DownstreamCommandMetric {
       destination: this.destination,
       duration: this.duration,
       timeout: this.timeout,
-    });
+    }, { color: ['FgMagenta', 'Reverse'] });
     logger.debug({
       type: METRIC_TYPES.DETAILED_COMMAND_FINISHED,
       request: this.request,
       response: this.response,
-    });
+    }, { color: ['FgMagenta'] });
   }
 }
 

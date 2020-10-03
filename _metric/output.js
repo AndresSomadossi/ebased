@@ -15,19 +15,18 @@ module.exports = {
       status: error.status,
       code: error.code,
       detail: error.message,
-    })
+    }, { color: ['FgRed', 'Reverse'] });
   },
   responseReturned(response, mode, meta) {
-    const infoLog = {
+    logger.info({
       type: METRIC_TYPES.OUTPUT_RETURNED,
       outputMode: mode,
       status: response.status,
-    }
-    if(meta) infoLog.duration = meta.publish();
-    logger.info(infoLog);
+      duration: (meta) ? meta.publish() : null
+    }, { color: ['FgGreen', 'Reverse'] });
     logger.debug({
       type: METRIC_TYPES.DETAILED_OUTPUT_RETURNED,
       body: JSON.stringify(response.body),
-    });
+    }, { color: ['FgGreen'] });
   }
 }

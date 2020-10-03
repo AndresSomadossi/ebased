@@ -9,6 +9,6 @@ module.exports = {
       id: event.id,
       time: event.time,
       payload: JSON.stringify(event.payload),
-    })
+    }, { color: ['FgBlue', 'Reverse'] });
   }
 }

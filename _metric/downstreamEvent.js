@@ -29,11 +29,11 @@ class DownstreamEventMetric {
       destination: this.destination,
       duration: this.duration,
       timeout: this.timeout,
-    });
+    }, { color: ['FgCyan', 'Reverse'] });
     logger.debug({
       type: METRIC_TYPES.DETAILED_EVENT_DELIVERED,
       eventData: this.eventData,
-    });
+    }, { color: ['FgCyan'] });
   }
 }
 

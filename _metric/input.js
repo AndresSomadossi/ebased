@@ -14,10 +14,10 @@ module.exports.input = (inputPayload, context, inputMode, inputMeta) => {
     logLevel: process.env.LOG_LEVEL || 'INFO',
     inputMode: inputMode,
     inputMeta: inputMeta,
-  });
+  }, { color: ['FgGreen', 'Reverse'] });
   logger.debug({
     type: METRIC_TYPES.DETAILED_INPUT_RECEIVED,
     env: JSON.stringify(process.env),
     inputPayload: JSON.stringify(inputPayload),
-  });
+  }, { color: ['FgGreen'] });
 }

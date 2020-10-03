@@ -14,7 +14,7 @@ module.exports = {
       layer: error.layer,
       message: JSON.stringify(error.message),
       stack: error.stack,
-    })
+    }, { color: ['FgRed', 'Reverse'] });
   },
   errorHandled(error) {
     logger.error({
@@ -23,6 +23,6 @@ module.exports = {
       code: error.code,
       layer: error.layer,
       message: JSON.stringify(error.message),
-    })
+    }, { color: ['FgYellow', 'Reverse'] });
   },
 }
