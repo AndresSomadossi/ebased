@@ -1,8 +1,3 @@
-const STEP_TYPE = {
-  STARTED: 'TRACE_STARTED',
-  FINISHED: 'TRACE_FINISHED',
-}
-
 class Metadata {
   constructor(context = {}, meta = {}) {
     this.tracedDuration = new TracedDuration(meta.tracedDuration);
@@ -32,6 +27,7 @@ class Metadata {
     this.time && (objectMeta.time = this.time);
     this.type && (objectMeta.type = this.type);
     this.specversion && (objectMeta.specversion = this.specversion);
+    objectMeta.tracedDuration = this.tracedDuration.get();
     return objectMeta;
   }
   publish() {
@@ -45,33 +41,35 @@ class Metadata {
     return metaToInject;
   }
 }
-
 class TracedDuration {
-  constructor(steps) {
-    this.steps = steps || [{ name: STEP_TYPE.STARTED, time: Date.now() }];
-    this.initStep = { name: 'INIT_PROCESSING', time: Date.now() };
+  constructor({ order, source, time, acumDuration } = {}) {
+    this.rawInput = { order, source, time, acumDuration };
+    this.source = source || 'CLIENT_COMMAND';
+    this.order = (!isNaN(order)) ? order + 1 : 0;
+    this.pStarted = { name: 'PROCESSING_STARTED', time: Date.now() };
+    this.pStarted.stepDuration = (!isNaN(time)) ? this.pStarted.time - time : 0;
+    this.pStarted.acumDuration = (!isNaN(acumDuration)) ? acumDuration + this.pStarted.stepDuration : 0;
   }
-  get() { return this.steps; }
-  addStep(name) {
-    const steps = [...this.steps];
-    steps.push({ name: `STEP_${name}`, time: Date.now() });
-    return steps;
-  }
+  get() { return this.rawInput }
+  addStep(source) { return { order: this.order, source, time: Date.now(), acumDuration: this.pStarted.acumDuration } }
   publish() {
-    this.steps.push(this.initStep);
-    this.steps.push({ name: STEP_TYPE.FINISHED, time: Date.now() });
-    const logObject = {}
-    this.steps.forEach((step, index, arr) => {
-      if (index === 0) {
-        step.stepDuration = 0;
-        step.totalDuration = 0;
-      } else {
-        step.stepDuration = step.time - arr[index - 1].time;
-        step.totalDuration = step.time - arr[0].time;
+    this.pFinished = { name: 'PROCESSING_FINISHED', time: Date.now() };
+    this.pFinished.stepDuration = this.pFinished.time - this.pStarted.time;
+    this.pFinished.acumDuration = this.pStarted.acumDuration + this.pFinished.stepDuration;
+    return {
+      order: this.order,
+      source: this.source,
+      [this.pStarted.name]: {
+        time: this.pStarted.time,
+        stepDuration: this.pStarted.stepDuration,
+        acumDuration: this.pStarted.acumDuration,
+      },
+      [this.pFinished.name]: {
+        time: this.pFinished.time,
+        stepDuration: this.pFinished.stepDuration,
+        acumDuration: this.pFinished.acumDuration,
       }
-      logObject[step.name] = { time: step.time, stepDuration: step.stepDuration, totalDuration: step.totalDuration };
-    });
-    return logObject;
+    };
   }
 }
 
