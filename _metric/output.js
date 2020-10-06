@@ -7,7 +7,7 @@ const METRIC_TYPES = {
 };
 
 module.exports = {
-  responseErrorReturned(error, mode) {
+  responseErrorReturned(error, mode, meta) {
     logger.error({
       type: METRIC_TYPES.OUTPUT_ERROR_RETURNED,
       outputMode: mode,
@@ -15,6 +15,7 @@ module.exports = {
       status: error.status,
       code: error.code,
       detail: error.message,
+      duration: (meta) ? meta.publish() : null
     }, { color: ['FgRed', 'Reverse'] });
   },
   responseReturned(response, mode, meta) {
