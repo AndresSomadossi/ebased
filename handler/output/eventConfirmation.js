@@ -7,9 +7,9 @@ module.exports = {
     outputMetric.responseReturned({ body, status }, mode, meta);
     return;
   },
-  processingFinishedError: (error) => {
+  processingFinishedError: (error, meta) => {
     error = FaultHandled.captureUnhanlded(error, { code: 'UHANDLED_OUTPUT_FAULT', layer: mode });
-    outputMetric.responseErrorReturned(error, mode);
+    outputMetric.responseErrorReturned(error, mode, meta);
     throw JSON.stringify(error.get());
   },
 }

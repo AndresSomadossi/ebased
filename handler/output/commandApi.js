@@ -10,10 +10,10 @@ module.exports = {
       body: (typeof body === 'string') ? body : JSON.stringify(body),
     };
   },
-  responseError: (error) => {
+  responseError: (error, meta) => {
     error = FaultHandled.captureUnhanlded(error, { code: 'UHANDLED_OUTPUT_FAULT', layer: mode });
-    outputMetric.responseErrorReturned(error, mode);
+    outputMetric.responseErrorReturned(error, mode, meta);
     const { status, code, detail } = error.get()
-    return { statusCode: status, body: { code, detail } };
+    return { statusCode: status, body: JSON.stringify({ code, detail }) };
   },
 }
