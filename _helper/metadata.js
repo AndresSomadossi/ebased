@@ -42,32 +42,32 @@ class Metadata {
   }
 }
 class TracedDuration {
-  constructor({ order, source, time, acumDuration } = {}) {
-    this.rawInput = { order, source, time, acumDuration };
+  constructor({ order, source, time, accumDuration } = {}) {
+    this.rawInput = { order, source, time, accumDuration };
     this.source = source || 'CLIENT_COMMAND';
     this.order = (!isNaN(order)) ? order + 1 : 0;
     this.pStarted = { name: 'PROCESSING_STARTED', time: Date.now() };
     this.pStarted.stepDuration = (!isNaN(time)) ? this.pStarted.time - time : 0;
-    this.pStarted.acumDuration = (!isNaN(acumDuration)) ? acumDuration + this.pStarted.stepDuration : 0;
+    this.pStarted.accumDuration = (!isNaN(accumDuration)) ? accumDuration + this.pStarted.stepDuration : 0;
   }
   get() { return this.rawInput }
-  addStep(source) { return { order: this.order, source, time: Date.now(), acumDuration: this.pStarted.acumDuration } }
+  addStep(source) { return { order: this.order, source, time: Date.now(), accumDuration: this.pStarted.accumDuration } }
   publish() {
     this.pFinished = { name: 'PROCESSING_FINISHED', time: Date.now() };
     this.pFinished.stepDuration = this.pFinished.time - this.pStarted.time;
-    this.pFinished.acumDuration = this.pStarted.acumDuration + this.pFinished.stepDuration;
+    this.pFinished.accumDuration = this.pStarted.accumDuration + this.pFinished.stepDuration;
     return {
       order: this.order,
       source: this.source,
       [this.pStarted.name]: {
         time: this.pStarted.time,
         stepDuration: this.pStarted.stepDuration,
-        acumDuration: this.pStarted.acumDuration,
+        accumDuration: this.pStarted.accumDuration,
       },
       [this.pFinished.name]: {
         time: this.pFinished.time,
         stepDuration: this.pFinished.stepDuration,
-        acumDuration: this.pFinished.acumDuration,
+        accumDuration: this.pFinished.accumDuration,
       }
     };
   }
