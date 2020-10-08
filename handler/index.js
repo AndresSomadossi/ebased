@@ -49,7 +49,7 @@ module.exports = {
     const { events, context } = input;
     const { bachtEventReceived } = inputMode;
     const { processingFinished, processingFinishedError } = outputMode;
-    const batchEventParams = { events, context, eventReceived, domain, processingFinished, processingFinishedError };
+    const batchEventParams = { events, context, bachtEventReceived, domain, processingFinished, processingFinishedError };
     const batchEventSchema = new Schema({
       events: { type: Object, required: true },
       context: { type: Object, required: true },
