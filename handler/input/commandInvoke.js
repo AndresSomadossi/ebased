@@ -12,7 +12,7 @@ module.exports = {
       inputMetric.input(command, context, mode, commandMeta.get());
       return { commandPayload: command, commandMeta, rawCommand };
     } catch (error) {
-      throw new FaultHandled(error.message, { code: 'BAD_INPUT_PROTOCOL_ERROR', layer: mode });
+      throw new FaultHandled(error.message, { code: 'BAD_INPUT_PROTOCOL_FAULT', layer: mode });
     }
   }
 }

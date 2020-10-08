@@ -19,9 +19,9 @@
   "dependencies": {
     "aws-sdk": "^2.747.0",
     "aws-xray-sdk-core": "^3.1.0",
-    "schemy": "^1.6.3",
     "axios": "^0.20.0",
-    "uuid": "^8.3.0",
-    "js-yaml": "^3.14.0"
+    "js-yaml": "^3.14.0",
+    "schemy": "^1.7.0",
+    "uuid": "^8.3.0"
   }
 }

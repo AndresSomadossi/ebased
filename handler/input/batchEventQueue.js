@@ -4,7 +4,7 @@ const { FaultHandled } = require('../../util/error');
 const mode = 'INPUT_BATCH_EVENT_QUEUE';
 
 module.exports = {
-  eventReceived: async (event = {}, context = {}) => {
+  bachtEventReceived: async (event = {}, context = {}) => {
     try {
       const rawEvent = event;
       const { id, source, time, specversion, tracedDuration, clientId, trackingTag } = event.messageAttributes;
