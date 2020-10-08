@@ -6,14 +6,14 @@ module.exports = {
     if (!requestResult.commandPayload) return requestResult;
     const { commandPayload, commandMeta, rawCommand } = requestResult;
     return await domain(commandPayload, commandMeta, rawCommand)
-      .then(r => response(r))
+      .then(r => response(r, commandMeta))
       .catch((e) => responseError(e, commandMeta));
   },
   eventMapper: async ({ event, context }, inputMode, domain, outputMode) => {
     const { eventReceived } = inputMode;
     const { processingFinished, processingFinishedError } = outputMode;
-    const { eventPayload, eventMeta } = await eventReceived(event, context).catch(processingFinishedError);
-    await domain(eventPayload, eventMeta)
+    const { eventPayload, eventMeta, rawEvent } = await eventReceived(event, context).catch(processingFinishedError);
+    await domain(eventPayload, eventMeta, rawEvent)
       .then(r => processingFinished(r, eventMeta))
       .catch(e => processingFinishedError(e, eventMeta))
   },

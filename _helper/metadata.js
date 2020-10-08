@@ -43,21 +43,27 @@ class Metadata {
 }
 class TracedDuration {
   constructor({ order, source, time, accumDuration } = {}) {
+    this.stepCounter = 0;
     this.rawInput = { order, source, time, accumDuration };
     this.source = source || 'CLIENT_COMMAND';
-    this.order = (!isNaN(order)) ? order + 1 : 0;
+    this.baseOrder = (order !== undefined) ? order : 1;
     this.pStarted = { name: 'PROCESSING_STARTED', time: Date.now() };
     this.pStarted.stepDuration = (!isNaN(time)) ? this.pStarted.time - time : 0;
     this.pStarted.accumDuration = (!isNaN(accumDuration)) ? accumDuration + this.pStarted.stepDuration : 0;
   }
   get() { return this.rawInput }
-  addStep(source) { return { order: this.order, source, time: Date.now(), accumDuration: this.pStarted.accumDuration } }
+  addStep(source) {
+    const newOrder = `${this.baseOrder}.${++this.stepCounter}`;
+    const now = Date.now();
+    const accum = Date.now() - this.pStarted.time + this.pStarted.accumDuration; 
+    return { order: newOrder, source, time: now, accumDuration: accum }
+  }
   publish() {
     this.pFinished = { name: 'PROCESSING_FINISHED', time: Date.now() };
     this.pFinished.stepDuration = this.pFinished.time - this.pStarted.time;
     this.pFinished.accumDuration = this.pStarted.accumDuration + this.pFinished.stepDuration;
     return {
-      order: this.order,
+      order: this.baseOrder,
       source: this.source,
       [this.pStarted.name]: {
         time: this.pStarted.time,
