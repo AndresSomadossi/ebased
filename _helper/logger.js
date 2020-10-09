@@ -40,8 +40,12 @@ const addMetada = () => {
 
 const print = (log, ops) => {
   if (process.env.IS_LOCAL) {
+    // console.log(log);
+    // if (!log.type) log.type = 'UNTYPED';
     const ymlArray = yml.dump(log).split('\n');
-    console.log(...ops.color.map(c => COLOR[c]), ymlArray.shift(), COLOR.Reset, '\n', ymlArray.join('\n'), '\n');
+    // console.log(ymlArray);
+    const color = (ops && Array.isArray(ops.color)) ? ops.color.map(c => COLOR[c]) : [''];
+    console.log(...color, ymlArray.shift(), COLOR.Reset, '\n', ymlArray.join('\n'), '\n');
   } else console.log(log);
 }
 
@@ -51,7 +55,6 @@ const logger = level => async (log, ops = {}) => {
   const meta = addMetada();
   print({ ...log, level, meta }, ops);
 };
-
 
 module.exports = {
   debug: logger('DEBUG'),
