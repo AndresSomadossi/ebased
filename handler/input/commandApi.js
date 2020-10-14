@@ -7,8 +7,17 @@ module.exports = {
   request: async (command = {}, context = {}) => {
     try {
       const rawCommand = command;
-      if (command.headers.tracedDuration) command.headers.tracedDuration = JSON.parse(command.headers.tracedDuration);
-      const commandMeta = new Metadata(context, command.headers);
+      const metaMapping = {
+        tracedDuration: (command.headers['traced-duration']) ?  JSON.parse(command.headers['traced-duration']): {},
+        clientId: command.headers['client-id'],
+        trackingTag: command.headers['tracking-tag'],
+        id: command.headers.id,
+        source: command.headers.source,
+        time: command.headers.time,
+        type: command.headers.type,
+        specversion: command.headers.specversion,
+      };
+      const commandMeta = new Metadata(context, metaMapping);
       const commandPayload = getPayload(command);
       inputMetric.input(commandPayload, context, mode, commandMeta.get());
       return { commandPayload, commandMeta, rawCommand };

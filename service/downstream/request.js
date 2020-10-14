@@ -53,8 +53,18 @@ function verifyParams(params) {
 function injectMeta(params, commandMeta) {
   if (commandMeta) {
     params.headers = { ...params.headers, ...commandMeta };
-    Object.keys(params.headers).forEach(p =>
-      params.headers[p] = (typeof params.headers[p] === 'string') ?
-      params.headers[p] : JSON.stringify(params.headers[p]))
+    const metaMapping = {
+      tracedDuration: 'traced-duration',
+      clientId: 'client-id',
+      trackingTag: 'tracking-tag',
+      id: 'id',
+      source: 'source',
+      time: 'time',
+      type: 'type',
+      specversion: 'specversion',
+    };
+    Object.keys(commandMeta).forEach(p => {
+      params.headers[metaMapping[p]] = (typeof commandMeta[p] === 'string') ? commandMeta[p] : JSON.stringify(commandMeta[p])
+    })
   }
 }
