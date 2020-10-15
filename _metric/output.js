@@ -15,6 +15,7 @@ module.exports = {
       status: error.status,
       code: error.code,
       detail: error.message,
+      metaParams: (meta) ? meta.get() : null,
       duration: (meta) ? meta.publish() : null
     }, { color: ['FgRed', 'Reverse'] });
   },
@@ -23,6 +24,7 @@ module.exports = {
       type: METRIC_TYPES.OUTPUT_RETURNED,
       outputMode: mode,
       status: response.status,
+      metaParams: (meta) ? meta.get() : null,
       duration: (meta) ? meta.publish() : null
     }, { color: ['FgGreen', 'Reverse'] });
     logger.debug({

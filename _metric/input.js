@@ -13,7 +13,7 @@ module.exports.input = (inputPayload, context, inputMode, inputMeta) => {
     timeout: (context.getRemainingTimeInMillis) && context.getRemainingTimeInMillis(),
     logLevel: process.env.LOG_LEVEL || 'INFO',
     inputMode: inputMode,
-    inputMeta: inputMeta,
+    metaParams: inputMeta,
   }, { color: ['FgGreen', 'Reverse'] });
   logger.debug({
     type: METRIC_TYPES.DETAILED_INPUT_RECEIVED,

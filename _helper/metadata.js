@@ -64,7 +64,6 @@ class TracedDuration {
     this.pFinished.accumDuration = this.pStarted.accumDuration + this.pFinished.stepDuration;
     return {
       order: this.baseOrder,
-      source: this.source,
       [this.pStarted.name]: {
         time: this.pStarted.time,
         stepDuration: this.pStarted.stepDuration,
