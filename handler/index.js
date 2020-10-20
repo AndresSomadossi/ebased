@@ -73,8 +73,8 @@ module.exports = {
     if (!domainResults.some(d => d.result instanceof Error)) return;
     // At least one Error
     if (!retryStrategy) retryStrategy = () => 0;
-    const failedBatchExecution = await Promise.all(domainResults.map(async domain => {
-      const { result, rawEvent } = domain;
+    const failedBatchExecution = await Promise.all(domainResults.map(async domainResult => {
+      const { result, rawEvent } = domainResult;
       // Message delay strategy
       if (result instanceof Error) return retryEvent(rawEvent, retryStrategy);
       // Force message deletation
@@ -89,5 +89,5 @@ const validate = async (params, schema, errorOutput) => {
     e = new FaultHandled(e, { code: 'BAD_MAPPER_INPUT_FAULT', layer: 'MAPPER' });
     if (typeof errorOutput === 'function') return errorOutput(e);
     return e.get();
-  })
+  });
 }
