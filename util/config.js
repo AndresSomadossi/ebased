@@ -1,10 +1,13 @@
 const { FaultHandled } = require('./error')
+const { missingConfig } = require('../_metric/warning')
 let jsonStaticConfig;
 
 module.exports = {
   get: (configName) => {
     if (!jsonStaticConfig) parseStaticConfig();
-    return jsonStaticConfig[configName] || process.env[configName] || null;
+    const value = jsonStaticConfig[configName] || process.env[configName] || null;
+    if (value === null) missingConfig(configName, 'GET_STATIC_CONFIG');
+    return value;
   }
 }
 
@@ -16,5 +19,4 @@ const parseStaticConfig = () => {
   } catch (error) {
     throw new FaultHandled(staticConfig, { code: 'INVALID_STATIC_CONFIG_FAULT', layer: 'CONFIG' })
   }
-
 }
