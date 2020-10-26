@@ -1,8 +1,8 @@
-const logger = require('../util/logger');
+const logger = require('../_helper/logger');
 
 const METRIC_TYPES = {
   COMMAND_FINISHED: 'SYS.METRIC.DOWNSTREAM.COMMAND_FINISHED',
-  DETAILED_COMMAND_FINISHED: 'SYS.METRIC.DOWNSTREAM.DETAILED_COMMAND_FINISHED',
+  DETAILED_COMMAND_FINISHED: 'SYS.LOG.DOWNSTREAM.DETAILED_COMMAND_FINISHED',
 }
 
 class DownstreamCommandMetric {
@@ -35,12 +35,12 @@ class DownstreamCommandMetric {
       destination: this.destination,
       duration: this.duration,
       timeout: this.timeout,
-    });
+    }, { color: ['FgMagenta', 'Reverse'] });
     logger.debug({
       type: METRIC_TYPES.DETAILED_COMMAND_FINISHED,
       request: this.request,
       response: this.response,
-    });
+    }, { color: ['FgMagenta'] });
   }
 }
 

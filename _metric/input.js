@@ -1,8 +1,8 @@
-const logger = require('../util/logger');
+const logger = require('../_helper/logger');
 
 const METRIC_TYPES = {
   INPUT_RECEIVED: 'SYS.METRIC.INPUT.INPUT_RECEIVED',
-  DETAILED_INPUT_RECEIVED: 'SYS.METRIC.INPUT.DETAILED_INPUT_RECEIVED',
+  DETAILED_INPUT_RECEIVED: 'SYS.LOG.INPUT.DETAILED_INPUT_RECEIVED',
 };
 
 module.exports.input = (inputPayload, context, inputMode, inputMeta) => {
@@ -13,11 +13,11 @@ module.exports.input = (inputPayload, context, inputMode, inputMeta) => {
     timeout: (context.getRemainingTimeInMillis) && context.getRemainingTimeInMillis(),
     logLevel: process.env.LOG_LEVEL || 'INFO',
     inputMode: inputMode,
-    inputMeta: inputMeta,
-  });
+    metaParams: inputMeta,
+  }, { color: ['FgGreen', 'Reverse'] });
   logger.debug({
     type: METRIC_TYPES.DETAILED_INPUT_RECEIVED,
     env: JSON.stringify(process.env),
     inputPayload: JSON.stringify(inputPayload),
-  });
+  }, { color: ['FgGreen'] });
 }

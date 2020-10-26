@@ -1,6 +1,6 @@
 {
   "name": "ebased",
-  "version": "1.1.0",
+  "version": "1.5.0",
   "description": "Utilities to write Event Driven architectures on AWS",
   "main": "index.js",
   "scripts": {
@@ -8,10 +8,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AndresSomadossi/ebased.git"
+    "url": "git://github.com/AndresSomadossi/ebased.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "AndresSomadossi (andressomadossi@gmail.com)",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/AndresSomadossi/ebased/issues"
   },
@@ -20,7 +20,8 @@
     "aws-sdk": "^2.747.0",
     "aws-xray-sdk-core": "^3.1.0",
     "axios": "^0.20.0",
-    "schemy": "^1.5.3",
+    "js-yaml": "^3.14.0",
+    "schemy": "^1.8.1",
     "uuid": "^8.3.0"
   }
 }

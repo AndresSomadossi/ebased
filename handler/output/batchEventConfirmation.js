@@ -1,15 +1,15 @@
 const outputMetric = require('../../_metric/output');
 const { FaultHandled } = require('../../util/error');
-const mode = 'OUTPUT_COMMAND_INVOKE';
+const mode = 'OUTPUT_BATCH_EVENT_CONFIRMATION';
 
 module.exports = {
-  response: ({ body = {}, status = 200 } = {}, meta) => {
+  processingFinished: ({ body = {}, status = 202 } = {}, meta, rawEvent) => {
     outputMetric.responseReturned({ body, status }, mode, meta);
-    return body;
+    return { result: body, rawEvent };
   },
-  responseError: (error, meta) => {
+  processingFinishedError: (error, meta, rawEvent) => {
     error = FaultHandled.captureUnhanlded(error, { code: 'UHANDLED_OUTPUT_FAULT', layer: mode });
     outputMetric.responseErrorReturned(error, mode, meta);
-    throw JSON.stringify(error.get());
+    return { result: error, rawEvent };
   },
 }
