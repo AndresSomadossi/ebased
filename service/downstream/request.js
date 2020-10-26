@@ -4,8 +4,6 @@ const { ErrorHandled, FaultHandled } = require('../../util/error');
 tracer.captureHTTP();
 const axios = require('axios').default;
 
-
-
 const layer = 'DOWNSTREAM_REQUEST';
 const CODES = {
   REQUEST_FINISHED_OK: 'REQUEST_FINISHED_OK',
@@ -14,9 +12,20 @@ const CODES = {
   REQUEST_INVOCATION_FAULT: 'REQUEST_INVOCATION_FAULT',
 };
 
-module.exports = async (params) => {
+module.exports = async ({
+  url, 
+  method, 
+  headers = {}, 
+  params, 
+  data, 
+  timeout, 
+  responseType = 'json', 
+  responseEncoding = 'utf-8'
+} = {}) => {
   try {
+    const params = { ...arguments[0] };
     verifyParams(params);
+
     const metric = new DownstreamCommandMetric(layer);
     const result = await axios
       .request(params)
@@ -48,6 +57,6 @@ module.exports = async (params) => {
 };
 
 function verifyParams(params) {
-  if (params.timeout) params.timeout = parseInt(params.timeout);
+  if (typeof params.timeout !== 'undefined') params.timeout = parseInt(params.timeout);
   if (isNaN(params.timeout)) throw new Error('Invalid timeout value');
 }
