@@ -1,7 +1,7 @@
 {
   "name": "ebased",
-  "version": "1.5.0",
-  "description": "Utilities to write Event Driven architectures on AWS",
+  "version": "1.6.0",
+  "description": "Utilities to write Event Driven & Serverless architectures on AWS",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
