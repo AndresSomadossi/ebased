@@ -36,9 +36,8 @@ class InputValidation {
       throw error;
     } else this.payload = this.schema.getBody();
   }
-  publish() {
-    if (this.source === 'CLIENT_COMMAND') customEvent(this);
-  }
+  publish() { if (this.source === 'CLIENT_COMMAND') customEvent(this) }
+  get() { return this.payload }
 }
 
 module.exports = { InputValidation };
