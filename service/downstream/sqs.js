@@ -11,10 +11,16 @@ const CODES = {
 };
 
 module.exports = {
+  /**
+   * Sends a message to a SQS queue
+   * 
+   * @param {Object} sendParams Params for the message as used on AWS SDK. MessageBody will be auto converted to string if needed.
+   * @param {Object} eventMeta Event meta context. Needed to keep track of the flow.
+   */
   send: async (sendParams, eventMeta) => {
     try {
       sendParams.QueueUrl = arnCheck(sendParams.QueueUrl);
-      sendParams.MessageBody = JSON.stringify(sendParams.MessageBody);
+      sendParams.MessageBody = (typeof sendParams.MessageBody !== 'string') ? JSON.stringify(sendParams.MessageBody) : sendParams.MessageBody;
       injectMeta(sendParams, eventMeta);
       const timeout = sqs.config.httpOptions.timeout;
       const { QueueUrl, MessageBody, MessageAttributes = {} } = sendParams;

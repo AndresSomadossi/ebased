@@ -41,7 +41,9 @@ module.exports = {
     try {
       invokeParams.InvocationType = 'Event';
       injectMeta(invokeParams, eventMeta);
-      if (invokeParams.Payload) invokeParams.Payload = JSON.stringify(invokeParams.Payload);
+      if (invokeParams.Payload) {
+        invokeParams.Payload = (typeof invokeParams.Payload !== 'string') ? JSON.stringify(invokeParams.Payload) : invokeParams.Payload;
+      }
       const timeout = lambda.config.httpOptions.timeout;
       const metric = new DownstreamEventMetric(`${layer}_ASYNC_INVOKE`, timeout, invokeParams.FunctionName, invokeParams.Payload);
       await lambda.invoke(invokeParams).promise().catch(error => {
@@ -75,7 +77,7 @@ async function parsePayload(Payload) {
 
 function toJSON(str) {
   try {
-    const jsonPayload = JSON.parse(str);
+    const jsonPayload = (typeof str !== 'string') ? str : JSON.parse(str);
     if (typeof jsonPayload !== 'object') throw new Error();
     return jsonPayload;
   } catch (error) {
