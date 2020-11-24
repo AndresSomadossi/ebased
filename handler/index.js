@@ -70,15 +70,12 @@ module.exports = {
    * Use this mapper whenever your code executes via events with batch events such as SQS
    * 
    * @param {Object<{event, context}>} input Lambda input, requires event and context.
-   * @param {Object<{eventReceived}>} inputMode Object with an eventReceived function to handle the input.
+   * @param {Object<{batchEventReceived, commitEvent, retryEvent}>} inputMode Object with an eventReceived function to handle the input.
    * @param {Function} domain The main logic of your lambda. It will be called passing eventPayload, eventMeta and rawEvent as params.
    * @param {Object<{processingFinishedError, processingFinishedError}>} outputMode An object with to callbacks one in case your domain success and one in case an error is caught.
    * @param {Function} retryStrategy A method defining the retry strategy, if nothing passed it will default to a function returning 0.
    */
-  batchEventMapper: async (input = {}, inputMode = {}, domain, outputMode = {}, retryStrategy) => {
-    const { events, context } = input;
-    const { batchEventReceived, commitEvent, retryEvent } = inputMode;
-    const { processingFinished, processingFinishedError } = outputMode;
+  batchEventMapper: async ({ events, context } = {}, { batchEventReceived, commitEvent, retryEvent } = {}, domain, { processingFinished, processingFinishedError } = {}, retryStrategy) => {
     const batchEventParams = { events, context, batchEventReceived, commitEvent, retryEvent, domain, processingFinished, processingFinishedError };
     const batchEventSchema = new Schema({
       events: { type: Object, required: true },
