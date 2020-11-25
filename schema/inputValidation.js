@@ -9,7 +9,7 @@ const ERROR_CODES = {
   CREATION_FAULT: 'METRIC_EVENT_CREATION_FAULT',
 };
 
-const skip = (process.env.EBASED_SKIP_SCHEMA_VALIDATIONS == 'true') ? true : false;
+const skip = (process.env.EBASED_SKIP_SCHEMA_VALIDATIONS === 'true');
 
 class InputValidation {
   constructor({ source, type, specversion, payload, schema }) {

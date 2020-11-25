@@ -2,10 +2,18 @@ const Schema = require('schemy');
 const { FaultHandled } = require('../util/error');
 
 module.exports = {
-  commandMapper: async (input = {}, inputMode = {}, domain, outputMode = {}) => {
-    const { command, context } = input;
-    const { request } = inputMode;
-    const { response, responseError } = outputMode;
+  /**
+   * Validates input and output from your handler, calls the domain and keep trace of your flow
+   * It will call your response callback if no errors are found, and your responseError callback otherwise
+   * 
+   * Use this mapper whenever your code executes via: Invoke or API Gateway
+   * 
+   * @param {Object<{command, context}>} input Lambda input, requires command and context.
+   * @param {Object<{request}>} inputMode The event validation method for the command and context.
+   * @param {Function} domain The main logic of your lambda. It will receive commandPayload, commandMeta and rawCommand as params.
+   * @param {Object<{response, responseError}>} outputMode Two functions to handle the output of your lambda, one for success other for error.
+   */
+  commandMapper: async ({ command, context } = {}, { request } = {}, domain, { response, responseError } = {}) => {
     const cmdParams = { command, context, request, domain, response, responseError };
     const cmdSchema = new Schema({
       command: { type: Object, required: true },
@@ -26,10 +34,18 @@ module.exports = {
       .catch((e) => responseError(e, commandMeta));
   },
 
-  eventMapper: async (input = {}, inputMode = {}, domain, outputMode = {}) => {
-    const { event, context } = input;
-    const { eventReceived } = inputMode;
-    const { processingFinished, processingFinishedError } = outputMode;
+  /**
+   * Validates input and output from your handler, calls the domain and keep trace of your flow
+   * It will call your response callback if no errors are found, and your responseError callback otherwise
+   * 
+   * Use this mapper whenever your code executes via events without batch such as SNS, S3, Event Bridge
+   * 
+   * @param {Object<{event, context}>} input Lambda input, requires event and context.
+   * @param {Object<{eventReceived}>} inputMode Object with an eventReceived function to handle the input.
+   * @param {Function} domain The main logic of your lambda. It will be called passing eventPayload, eventMeta and rawEvent as params.
+   * @param {Object<{processingFinishedError, processingFinishedError}>} outputMode An object with to callbacks one in case your domain success and one in case an error is caught.
+   */
+  eventMapper: async ({ event, context } = {}, { eventReceived } = {}, domain, { processingFinished, processingFinishedError } = {}) => {
     const eventParams = { event, context, eventReceived, domain, processingFinished, processingFinishedError };
     const eventSchema = new Schema({
       event: { type: Object, required: true },
@@ -44,13 +60,22 @@ module.exports = {
     const { eventPayload, eventMeta, rawEvent } = await eventReceived(event, context).catch(processingFinishedError);
     await domain(eventPayload, eventMeta, rawEvent)
       .then(r => processingFinished(r, eventMeta))
-      .catch(e => processingFinishedError(e, eventMeta))
+      .catch(e => processingFinishedError(e, eventMeta));
   },
 
-  batchEventMapper: async (input = {}, inputMode = {}, domain, outputMode = {}, retryStrategy) => {
-    const { events, context } = input;
-    const { batchEventReceived, commitEvent, retryEvent } = inputMode;
-    const { processingFinished, processingFinishedError } = outputMode;
+  /**
+   * Validates input and output from your handler, calls the domain and keep trace of your flow
+   * It will call your response callback if no errors are found, and your responseError callback otherwise
+   * 
+   * Use this mapper whenever your code executes via events with batch events such as SQS
+   * 
+   * @param {Object<{event, context}>} input Lambda input, requires event and context.
+   * @param {Object<{batchEventReceived, commitEvent, retryEvent}>} inputMode Object with an eventReceived function to handle the input.
+   * @param {Function} domain The main logic of your lambda. It will be called passing eventPayload, eventMeta and rawEvent as params.
+   * @param {Object<{processingFinishedError, processingFinishedError}>} outputMode An object with to callbacks one in case your domain success and one in case an error is caught.
+   * @param {Function} retryStrategy A method defining the retry strategy, if nothing passed it will default to a function returning 0.
+   */
+  batchEventMapper: async ({ events, context } = {}, { batchEventReceived, commitEvent, retryEvent } = {}, domain, { processingFinished, processingFinishedError } = {}, retryStrategy) => {
     const batchEventParams = { events, context, batchEventReceived, commitEvent, retryEvent, domain, processingFinished, processingFinishedError };
     const batchEventSchema = new Schema({
       events: { type: Object, required: true },

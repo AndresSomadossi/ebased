@@ -11,10 +11,16 @@ const CODES = {
 };
 
 module.exports = {
+  /**
+   * Publishes message to SNS
+   * 
+   * @param {Object} publishParams Params for the message as seen on AWS SDK. Message will be converted to string if needed.
+   * @param {Object} eventMeta Event meta to keep track of the flow.
+   */
   publish: async (publishParams, eventMeta) => {
     try {
       publishParams.TopicArn = arnCheck(publishParams.TopicArn);
-      publishParams.Message = JSON.stringify(publishParams.Message);
+      publishParams.Message = (typeof publishParams.Message !== 'string') ? JSON.stringify(publishParams.Message) : publishParams.Message;
       injectMeta(publishParams, eventMeta);
       const timeout = sns.config.httpOptions.timeout;
       const { TopicArn, Message, MessageAttributes = {} } = publishParams;

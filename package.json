@@ -1,6 +1,6 @@
 {
   "name": "ebased",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "description": "Utilities to write Event Driven & Serverless architectures on AWS",
   "main": "index.js",
   "scripts": {

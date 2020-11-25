@@ -9,7 +9,7 @@ const ERROR_CODES = {
   UNMATCHED_CATALOG_FAULT: 'DOWNSTREAM_COMMAND_UNMATCHED_CATALOG_FAULT',
 };
 
-const skip = (process.env.EBASED_SKIP_SCHEMA_VALIDATIONS == 'true') ? true : false;
+const skip = (process.env.EBASED_SKIP_SCHEMA_VALIDATIONS === 'true');
 
 const getSource = () => {
   const name = process.env.AWS_LAMBDA_FUNCTION_NAME;
